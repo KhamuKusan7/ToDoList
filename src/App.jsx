@@ -1,28 +1,49 @@
 import { useState } from 'react'
 import Header from './MyComponents/Header'
+import AddItem from './MyComponents/AddItem'
 import Content from './MyComponents/Content'
 import Footer from './MyComponents/Footer'
 
 function App() {
-  const [items,setItems]=useState([
-    { id:1, checked:false, item:'One half pound of cocoa powder'},
-    { id:2, checked:false, item:'Item2'},
-    { id:3, checked:false, item:"Item3"}
-  ]);
+  const [items,setItems]=useState(JSON.parse(localStorage.getItem('shoppingList')));
+  const [newItem,setNewItem]=useState('')
+
+  const setAndSaveItems=(newItems)=>{
+    setItems(newItems);
+    localStorage.setItem('shoppingList',JSON.stringify(newItems));
+  }
+  
+  const addItem =(item)=>{
+    const id = items.length ? items[items.length - 1].id + 1 : 1;
+    const addNewItem = {id,checked:false,item}
+    const listItems = [...items, addNewItem]
+    setAndSaveItems(listItems) 
+  }
 
   const handleChange=(id)=>{
     const listItems = items.map((item)=>item.id === id ? {...item, checked: !item.checked} : item)
-    setItems(listItems)
+    setAndSaveItems(listItems)
   }
   const handleDelete=(id)=>{
     const listItems=items.filter((item)=>item.id !==id);
-    setItems(listItems)
+    setAndSaveItems(listItems)
+  }
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    if(!newItem) return;
+    addItem(newItem)
+    setNewItem('')
   }
   
 
   return (
     <div className='App'>
     <Header title='Groceries'/>
+    <AddItem
+      newItem={newItem}
+      setNewItem={setNewItem}
+      handleSubmit={handleSubmit}
+    />
     <Content
     items={items}
     handleChange={handleChange}

@@ -13,5 +13,4 @@ const SearchItem = ({search, setSearch}) => {
     </form>
   )
 }
-
 export default SearchItem

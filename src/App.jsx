@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Header from './MyComponents/Header'
+import SearchItem from './MyComponents/SearchItem'
 import AddItem from './MyComponents/AddItem'
 import Content from './MyComponents/Content'
 import Footer from './MyComponents/Footer'
@@ -7,6 +8,7 @@ import Footer from './MyComponents/Footer'
 function App() {
   const [items,setItems]=useState(JSON.parse(localStorage.getItem('shoppingList')));
   const [newItem,setNewItem]=useState('')
+  const [search,setSearch]=useState('')
 
   const setAndSaveItems=(newItems)=>{
     setItems(newItems);
@@ -38,14 +40,18 @@ function App() {
 
   return (
     <div className='App'>
-    <Header title='Groceries'/>
+    <Header title='To-Do List'/>
     <AddItem
       newItem={newItem}
       setNewItem={setNewItem}
       handleSubmit={handleSubmit}
     />
+    <SearchItem
+      search={search}
+      setSearch={setSearch}
+    />
     <Content
-    items={items}
+    items={items.filter(item=>((item.item).toLowerCase().includes(search.toLowerCase())))}
     handleChange={handleChange}
     handleDelete={handleDelete}
     />

@@ -35,7 +35,7 @@ function App() {
   },[])
   
   const addItem = async (item)=>{
-    const id = items.length ? items[items.length - 1].id + 1 : "1";
+    const id = items.length ? String(Number(items[items.length - 1].id) + 1) : "1";
     const addNewItem = {id,checked:false,item}
     const listItems = [...items, addNewItem]
     setItems(listItems) 

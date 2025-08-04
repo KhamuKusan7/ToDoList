@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import Header from './MyComponents/Header'
 import SearchItem from './MyComponents/SearchItem'
 import AddItem from './MyComponents/AddItem'
 import Content from './MyComponents/Content'
 import Footer from './MyComponents/Footer'
-import { useEffect } from 'react'
+import apiRequest from './MyComponents/apiRequest'
 
 function App() {
   const API_URL = 'http://localhost:3500/items'
@@ -17,7 +17,7 @@ function App() {
   useEffect(()=>{
     const fetchItems = async () =>{
       try{
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL)
         if(!response.ok) throw Error('Did not receive expected data')
         const listItems = await response.json();
         setItems(listItems)
@@ -34,20 +34,47 @@ function App() {
 
   },[])
   
-  const addItem =(item)=>{
-    const id = items.length ? items[items.length - 1].id + 1 : 1;
+  const addItem = async (item)=>{
+    const id = items.length ? items[items.length - 1].id + 1 : "1";
     const addNewItem = {id,checked:false,item}
     const listItems = [...items, addNewItem]
     setItems(listItems) 
+
+    const postOptions = {
+      method : 'POST',
+      headers : {
+        'Content-Type' : "application/json" 
+      },
+      body : JSON.stringify(addNewItem)
+    }
+    const result = await apiRequest(API_URL, postOptions);
+    if (result) setFetchError(result);
   }
 
-  const handleChange=(id)=>{
+  const handleChange= async (id)=>{
     const listItems = items.map((item)=>item.id === id ? {...item, checked: !item.checked} : item)
     setItems(listItems)
+
+    const myItem = listItems.filter((item)=> item.id === id)
+    const updateOptions = {
+      method : 'PATCH',
+      headers : {
+        'Content-Type' : 'application/json'
+      },
+      body : JSON.stringify({checked : myItem[0].checked})
+    }
+    const reqURL = `${API_URL}/${id}`
+    const result = await apiRequest(reqURL, updateOptions)
+    if (result) setFetchError(result)
   }
-  const handleDelete=(id)=>{
+  const handleDelete= async (id)=>{
     const listItems=items.filter((item)=>item.id !==id);
     setItems(listItems)
+
+    const deleteOptions = { method : 'DELETE' }
+    const reqURL = `${API_URL}/${id}`
+    const result = await apiRequest(reqURL, deleteOptions)
+    if (result) setFetchError(result)
   }
   const handleSubmit=(e)=>{
     e.preventDefault();

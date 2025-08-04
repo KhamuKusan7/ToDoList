@@ -1,19 +1,19 @@
 {
-    "items":[
-        {
-            "id":1,
-            "checked":false,
-            "item":"2hr workout"
-        },
-        {
-            "id":2,
-            "checked":false,
-            "item":"Futsal"
-        },
-        {
-            "id":3,
-            "checked":false,
-            "item":"Short walk"
-        }
-    ]
+  "items": [
+    {
+      "id": "1",
+      "checked": false,
+      "item": "2hr workout"
+    },
+    {
+      "id": "2",
+      "checked": false,
+      "item": "Futsal"
+    },
+    {
+      "id": "3",
+      "checked": false,
+      "item": "Web development"
+    }
+  ]
 }
